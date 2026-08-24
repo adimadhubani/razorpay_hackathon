@@ -76,8 +76,8 @@
 GEMINI_API_KEY=your_gemini_api_key_here
 GROQ_API_KEY=gsk_your_groq_api_key_here
 Installation & RunBash# Clone repository
-git clone [https://github.com/your-username/razorpay-intentguard.git](https://github.com/your-username/razorpay-intentguard.git)
-cd razorpay-intentguard
+git clone [https://github.com/adimadhubani/razorpay_hackathon.git](https://github.com/adimadhubani/razorpay_hackathon.git)
+cd razorpay_hackathon
 
 # Install dependencies
 npm install
