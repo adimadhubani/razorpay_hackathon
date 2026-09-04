@@ -7,7 +7,8 @@ import SecurityMetrics from '../components/SecurityMetrics';
 import AuditConsole from '../components/AuditConsole';
 import StepUpModal from '../components/StepUpModal';
 
-const SOCKET_SERVER_URL = window.location.hostname === 'localhost' ? 'http://localhost:5001' : '/';
+const API_BASE_URL = import.meta.env.VITE_API_URL || (['localhost', '127.0.0.1'].includes(window.location.hostname) ? 'http://localhost:5001' : '');
+const SOCKET_SERVER_URL = import.meta.env.VITE_SOCKET_URL || (['localhost', '127.0.0.1'].includes(window.location.hostname) ? 'http://localhost:5001' : '/');
 
 export default function Dashboard() {
   const [isConnected, setIsConnected] = useState(false);
@@ -75,7 +76,7 @@ export default function Dashboard() {
 
   const fetchActiveCapsule = async () => {
     try {
-      const res = await fetch('/api/v1/intent/active');
+      const res = await fetch(`${API_BASE_URL}/api/v1/intent/active`);
       const data = await res.json();
       if (data.success && data.capsule) {
         setActiveCapsule(data.capsule);
@@ -87,7 +88,7 @@ export default function Dashboard() {
 
   const fetchMetrics = async () => {
     try {
-      const res = await fetch('/api/v1/metrics');
+      const res = await fetch(`${API_BASE_URL}/api/v1/metrics`);
       const data = await res.json();
       if (data.success && data.metrics) {
         setMetrics(data.metrics);
@@ -99,7 +100,7 @@ export default function Dashboard() {
 
   const fetchLogs = async () => {
     try {
-      const res = await fetch('/api/v1/logs');
+      const res = await fetch(`${API_BASE_URL}/api/v1/logs`);
       const data = await res.json();
       if (data.success && Array.isArray(data.logs)) {
         setLogs(data.logs);
@@ -116,7 +117,7 @@ export default function Dashboard() {
   const handleGenerateCapsule = async (userPrompt) => {
     setLoadingCapsule(true);
     try {
-      const res = await fetch('/api/v1/intent', {
+      const res = await fetch(`${API_BASE_URL}/api/v1/intent`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: userPrompt })
@@ -136,7 +137,7 @@ export default function Dashboard() {
   const handleSimulatePayment = async (paymentPayload) => {
     setLoadingPayment(true);
     try {
-      const res = await fetch('/api/v1/pay', {
+      const res = await fetch(`${API_BASE_URL}/api/v1/pay`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(paymentPayload)
@@ -168,7 +169,7 @@ export default function Dashboard() {
   const handleApproveStepUp = async (logId) => {
     setLoadingApproval(true);
     try {
-      const res = await fetch('/api/v1/pay/approve', {
+      const res = await fetch(`${API_BASE_URL}/api/v1/pay/approve`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ logId })

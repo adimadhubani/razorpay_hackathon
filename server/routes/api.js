@@ -7,6 +7,7 @@ const router = express.Router();
 
 // Intent Guardrail Policy Routes
 router.post('/intent', createIntent);
+router.post('/policy/synthesize', createIntent);
 router.get('/intent/active', getActiveIntent);
 
 // Payment & Security Firewall Routes

@@ -15,19 +15,32 @@ let memoryStore = {
 };
 
 export const connectDB = async () => {
-  const uri = process.env.MONGO_URI || 'mongodb://localhost:27017/intentguard';
+  const uri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/intentguard';
+  
+  mongoose.connection.on('disconnected', () => {
+    isConnected = false;
+    console.warn('[MongoDB] Disconnected. Reverting to In-Memory Store.');
+  });
+
+  mongoose.connection.on('error', (err) => {
+    isConnected = false;
+    console.warn(`[MongoDB Error] ${err.message}. Using In-Memory Store.`);
+  });
+
   try {
     mongoose.set('strictQuery', true);
     await mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 3000
+      serverSelectionTimeoutMS: 2000,
+      bufferCommands: false
     });
     isConnected = true;
     console.log(`[MongoDB] Connected successfully to ${uri}`);
   } catch (err) {
     isConnected = false;
-    console.warn(`[MongoDB Warning] Could not connect to MongoDB (${err.message}). Using resilient In-Memory Store fallback.`);
+    console.warn(`[MongoDB Notice] Local MongoDB instance not reachable (${err.message}). Seamlessly activated In-Memory Store fallback.`);
   }
 };
 
 export const getIsDbConnected = () => isConnected;
 export const getMemoryStore = () => memoryStore;
+

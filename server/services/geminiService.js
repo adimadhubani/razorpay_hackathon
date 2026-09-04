@@ -18,7 +18,7 @@ export const generateIntentCapsule = async (userPromptText) => {
   if (apiKey) {
     try {
       const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-3.6-flash' });
 
       const prompt = `You are Razorpay IntentGuard's AI Policy Generator.
 Convert the following user shopping intent into a strict security JSON policy for an autonomous AI shopping agent.
@@ -38,7 +38,7 @@ Return ONLY a valid, raw JSON object (no markdown, no backticks, no explanatory 
 Rule Guidelines:
 1. Extract numerical budget limits accurately from INR / ₹ symbols or plain numbers. Default to 5000 if unspecified.
 2. set requiresApprovalAbove to 70% of maxBudget.
-3. allowedCategories must include relevant primary and sub-categories (e.g. for "running shoes", include ["running shoes", "footwear", "shoes", "sports apparel"]).
+3.Include only specific item categories and direct sub-categories. STRICTLY AVOID broad generic umbrella terms like "sports", "clothing", or "apparel" unless explicitly requested (e.g. for "running shoes", use ["running shoes", "footwear", "shoes"], NOT "sports apparel").
 4. Keep maxTransactions at 1 by default.`;
 
       const result = await model.generateContent(prompt);

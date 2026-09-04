@@ -5,7 +5,7 @@ import { generateIntentCapsule } from '../services/geminiService.js';
 
 export const createIntent = async (req, res) => {
   try {
-    const { prompt } = req.body;
+    const prompt = req.body.prompt || req.body.intent || req.body.policy || req.body.query || req.body.text;
     if (!prompt || typeof prompt !== 'string') {
       return res.status(400).json({
         success: false,
